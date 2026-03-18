@@ -1,15 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSpotDto } from './dto/create-spot.dto';
 import { UpdateSpotDto } from './dto/update-spot.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Spot } from './entities/spot.entity';
 
 @Injectable()
 export class SpotsService {
+  constructor(
+    @InjectRepository(Spot)
+    private readonly spotRepository: Repository<Spot>,
+  ) {}
+
   create(createSpotDto: CreateSpotDto) {
     return 'This action adds a new spot';
   }
 
   findAll() {
-    return `This action returns all spots`;
+    return this.spotRepository.find();
   }
 
   findOne(id: number) {
