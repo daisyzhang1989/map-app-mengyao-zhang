@@ -1,7 +1,12 @@
 'use client';
 
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMapEvents,
+} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { defaultIcon } from '@/lib/leaflet';
 
@@ -14,19 +19,54 @@ type Spot = {
   address: string;
 };
 
-export default function MapView({ spots }: { spots: Spot[] }) {
-  const defaultCenter: [number, number] = [35.681236, 139.767125];
+type MapCenter = {
+  lat: number;
+  long: number;
+};
 
+type MapViewProps = {
+  spots: Spot[];
+  center: MapCenter;
+  onCenterChange: (center: MapCenter) => void;
+};
+
+function MapCenterTracker({
+  onCenterChange,
+}: {
+  onCenterChange: (center: MapCenter) => void;
+}) {
+  useMapEvents({
+    moveend: (event) => {
+      const map = event.target;
+      const center = map.getCenter();
+
+      onCenterChange({
+        lat: center.lat,
+        long: center.lng,
+      });
+    },
+  });
+
+  return null;
+}
+
+export default function MapView({
+  spots,
+  center,
+  onCenterChange,
+}: MapViewProps) {
   return (
     <MapContainer
-      center={defaultCenter}
+      center={[center.lat, center.long]}
       zoom={12}
       style={{ height: '500px', width: '100%' }}
     >
       <TileLayer
-        attribution='&copy; OpenStreetMap contributors'
+        attribution="&copy; OpenStreetMap contributors"
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+
+      <MapCenterTracker onCenterChange={onCenterChange} />
 
       {spots.map((spot) => (
         <Marker key={spot.id} position={[spot.lat, spot.long]} icon={defaultIcon}>

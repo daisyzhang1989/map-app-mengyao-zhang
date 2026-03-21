@@ -24,3 +24,46 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+h1, h2 {
+  font-size: 20px;
+  font-weight: bold !important;
+}
+
+/* 検索範囲 */
+.search-radius-container {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-radius-label {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.search-radius-input {
+  padding: 8px 12px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  width: 120px;
+  transition: border-color 0.3s;
+}
+
+.search-radius-input:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+.search-radius-unit {
+  font-size: 13px;
+  color: #666;
+}
+
+/* スポット一覧 */
+.spot-item {
+  font-weight: 500;
+  font-size: 14px;
+}
