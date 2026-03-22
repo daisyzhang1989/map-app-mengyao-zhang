@@ -12,8 +12,6 @@ export type MapCenter = {
   long: number;
 };
 
-const BASE_URL = 'http://localhost:3001';
-
 export async function fetchSpots(params: {
   lat: number;
   long: number;
@@ -25,7 +23,7 @@ export async function fetchSpots(params: {
     radiusKm: String(params.radiusKm),
   });
 
-  const response = await fetch(`${BASE_URL}/spots?${searchParams.toString()}`);
+  const response = await fetch(`/api/spots?${searchParams.toString()}`);
 
   if (!response.ok) {
     throw new Error('スポット一覧の取得に失敗しました');
@@ -44,16 +42,12 @@ export async function reverseGeocode(params: {
   });
 
   const response = await fetch(
-    `${BASE_URL}/geocode/reverse?${searchParams.toString()}`
+    `/api/geocode/reverse?${searchParams.toString()}`
   );
 
   if (!response.ok) {
     throw new Error('住所の取得に失敗しました');
   }
 
-  const data = await response.json();
-
-  return {
-    address: data.address ?? '',
-  };
+  return response.json();
 }
