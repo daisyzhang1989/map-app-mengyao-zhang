@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## 環境構築
+本アプリは Docker を利用して、追加の環境構築なしで起動できます。
 
-## Getting Started
-
-First, run the development server:
-
+## 実行手順
+以下のコマンドを実行してください：
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+docker-compose up --build
 ```
+起動後、ブラウザで[http://localhost:3000](http://localhost:3000)にアクセスしてください。
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 使用した主要ライブラリとその選定理由
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**React Leaflet**  
+- 地図表示のために利用  
+- OpenStreetMap と組み合わせることで無料で使用可能
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**PostGIS**
+- 空間検索（距離計算）を効率的に実行可能
 
-## Learn More
+## 実装時に特に工夫した点・技術的な判断
 
-To learn more about Next.js, take a look at the following resources:
+### 1. API Proxy 構成（Next.js API Route）
+フロントエンドから直接バックエンドにアクセスするのではなく、
+Next.js の API Route を経由する構成にしました。
+これにより：
+- CORS 問題を回避
+- バックエンドの URL をフロントに露出しない
+- 将来的な認証やキャッシュの追加が容易
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 2. 空間検索の最適化（PostGIS の活用）
+PostGIS を利用し、DB側で距離条件による絞り込みを実施するようにしました。
+これにより：
+- クエリ段階で必要なデータのみ取得
+- パフォーマンスが大幅に改善
+- アプリ側のロジックがシンプル化
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. 地図操作とAPIリクエストの最適化
+地図の中心点変更に応じて API を呼び出す際、debounce を導入することで、API負荷の軽減を実現しました。
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+
+
+
