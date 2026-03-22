@@ -1,9 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SpotsModule } from './spots/spots.module';
+import { ConfigModule } from '@nestjs/config';
+import { GeocodeModule } from './geocode/geocode.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -15,6 +20,7 @@ import { SpotsModule } from './spots/spots.module';
       synchronize: true,
     }),
     SpotsModule,
+    GeocodeModule,
   ],
 })
 export class AppModule {}
