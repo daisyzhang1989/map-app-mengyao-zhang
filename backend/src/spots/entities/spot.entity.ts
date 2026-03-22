@@ -1,5 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
+type Point = {
+  type: 'Point';
+  coordinates: [number, number];
+};
+
 @Entity()
 export class Spot {
   @PrimaryGeneratedColumn()
@@ -19,4 +24,11 @@ export class Spot {
 
   @Column()
   address: string;
+
+  @Column({
+    type: 'geography',
+    spatialFeatureType: 'Point',
+    srid: 4326,
+  })
+  location: Point;
 }

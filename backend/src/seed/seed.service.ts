@@ -37,6 +37,10 @@ export class SeedService implements OnModuleInit {
       lat: Number(row.lat),
       long: Number(row.long),
       address: row.address,
+      location: {
+        type: 'Point' as const,
+        coordinates: [Number(row.long), Number(row.lat)],
+      },
     }));
 
     await this.spotRepository.save(spots);
